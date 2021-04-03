@@ -1,54 +1,66 @@
----------№1----------
+---1---
 SELECT COUNT(*), st.n_group
 FROM student st
 GROUP BY st.n_group
----------№2----------
+
+
+---2---
 SELECT MAX(st.score), st.n_group
 FROM student st
 GROUP BY st.n_group
----------№3----------
+
+
+---3---
 SELECT COUNT(*), st.surname
 FROM student st
 GROUP BY st.surname
----------№4----------
-SELECT AVG(st.score)::numeric(3,2),
-CASE
-	WHEN st.n_group::varchar LIKE '1%' THEN '1'
-	WHEN st.n_group::varchar LIKE '2%' THEN '2'
-	WHEN st.n_group::varchar LIKE '3%' THEN '3'
-	WHEN st.n_group::varchar LIKE '4%' THEN '4'
-	END AS Course
+
+
+---4---
+SELECT AVG(st.score)::numeric(3,2), LEFT(st.n_group::varchar, 1) AS Course
 FROM student st
 GROUP BY Course
 ORDER BY Course ASC
----------№5----------
+
+
+---5---
 SELECT AVG(st.score)::numeric(3,2), st.n_group
 FROM student st
 GROUP BY st.n_group
----------№6----------
+
+
+---6---
 SELECT AVG(st.score)::numeric(3,2), st.n_group
 FROM student st
 WHERE st.n_group::varchar LIKE '2%'
 GROUP BY st.n_group
 ORDER BY st.n_group DESC LIMIT 1
----------№7----------
+
+
+---7---
 SELECT AVG(st.score)::numeric(3,2), st.n_group
 FROM student st
 GROUP BY st.n_group
 HAVING AVG(st.score)::numeric(3,2) <= 3.9
 ORDER BY AVG(st.score)::numeric(3,2) ASC
----------№8---------- 
+
+
+---8--- 
 SELECT st.n_group, COUNT(*) AS number_of_students, MAX(st.score)::numeric(3,2) AS max_score, AVG(st.score)::numeric(3,2) AS average_score,
 MIN(st.score)::numeric(3,2) AS min_score
 FROM student st
 GROUP BY st.n_group
----------№9----------
+
+
+---9---
 SELECT st.name, st.surname, MAX(st.score)::numeric(3,2) AS student_score
 FROM student st
 WHERE st.n_group = 2222
 GROUP BY st.score,st.name,st.surname
 ORDER BY student_score DESC LIMIT 1
----------№10---------
+
+
+---10---
 SELECT st.name,st.surname,st.score,gr.n_group
 FROM (
 	select max(st.score) as mscore, st.n_group

@@ -1,39 +1,55 @@
---1--
+---1---
 SELECT st.name, st.surname
 FROM student st
 WHERE st.score BETWEEN 4 AND 4.5
---2--
+
+
+---2---
 SELECT *
 FROM student st
 WHERE st.n_group::varchar LIKE '3%'
---3--
+
+
+---3---
 SELECT *
 FROM student st
 ORDER BY st.n_group DESC, st.name
---4--
+
+
+---4---
 SELECT *
 FROM student st
 WHERE st.score > 4
 ORDER BY st.score DESC
---5--
+
+
+---5---
 SELECT hb.name, hb.risk
 FROM hobby hb
 WHERE hb.name IN ('Лыжные', 'Футбол')
---6--
+
+
+---6---
 SELECT st_h.student_id, st_h.hobby_id,st_h.date_finish
 FROM student_hobby st_h
 WHERE st_h.date_finish is null AND st_h.date_start BETWEEN '11-11-2017' AND now()
---7--
+
+
+---7---
 SELECT *
 FROM student st
 WHERE st.score > 4.5 
 ORDER BY st.score DESC
---8--
+
+
+---8---
 SELECT *
 FROM student st
 WHERE st.score > 4.5 
 ORDER BY st.score DESC LIMIT 5
---9--
+
+
+---9---
 SELECT *,
 CASE
 	WHEN hb.risk >= 8 THEN 'Очень высокий'
@@ -43,7 +59,9 @@ CASE
 	ELSE 'Очень низкий'
 	END AS Category
 FROM hobby hb
---10--
+
+
+---10---
 SELECT *
 FROM hobby hb
 ORDER BY hb.risk DESC LIMIT 3
