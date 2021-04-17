@@ -193,13 +193,16 @@ FROM longest_hobby_students lh
 
 
 ---21---
+CREATE OR REPLACE VIEW task21 AS
 SELECT 	st.id,
    	st.name,
    	st.surname
-FROM student st;
+FROM student st
+ORDER BY st.score DESC;
 
 
 ---22---
+CREATE OR REPLACE VIEW task22 AS
 SELECT 	chc.course,
     	h.name AS hobby_name
 FROM ( 	
@@ -215,6 +218,7 @@ JOIN hobby h ON chc.hobby_id = h.id;
 
 
 ---23---
+CREATE OR REPLACE VIEW task23 AS
  SELECT "left"(st.n_group::character varying::text, 1) AS course,
     h.name
    FROM student st
@@ -226,6 +230,7 @@ JOIN hobby h ON chc.hobby_id = h.id;
 
 
 ---24---
+CREATE OR REPLACE VIEW task24 AS
  SELECT t1.course,
     t1.cntg,
     t2.cntf
@@ -241,6 +246,7 @@ JOIN hobby h ON chc.hobby_id = h.id;
 
 
 ---25---
+CREATE OR REPLACE VIEW task25 AS
  SELECT ht.name
    FROM ( SELECT h.name,
             count(*) AS count
@@ -252,6 +258,7 @@ JOIN hobby h ON chc.hobby_id = h.id;
 
 
 ---26---
+CREATE OR REPLACE VIEW task26 AS
  SELECT student.name,
     student.surname,
     student.date_birth,
@@ -260,7 +267,7 @@ JOIN hobby h ON chc.hobby_id = h.id;
 
 
 ---27---
-SELECT LEFT(name, 1) AS f_letter, MAX(score)::numeric(3,2) as max_score,AVG(score)::numeric(3,2) as average,MIN(score)::numeric(3,2)
+SELECT left(name, 1) as f_letter, MAX(score)::numeric(3,2) as max_score,AVG(score)::numeric(3,2) as average,MIN(score)::numeric(3,2)
 FROM student
 GROUP BY f_letter
 HAVING MAX(score)>3.6
@@ -275,4 +282,89 @@ order by st.surname asc
 
 
 ---29---
+SELECT 	DISTINCT EXTRACT(YEAR FROM st.date_birth) AS date_birth,
+		COUNT(sth.hobby_id) AS hobbies
+FROM student st
+INNER JOIN student_hobby sth
+ON sth.student_id = st.id
+GROUP BY date_birth
+ORDER BY date_birth
+
+
+---30---
+SELECT 	LEFT(st.name, 1) AS f_letter, MAX(h.risk),MIN(h.risk)
+FROM student st
+INNER JOIN student_hobby sth
+ON st.id = sth.student_id
+INNER JOIN hobby h
+ON sth.hobby_id = h.id
+group by f_letter
+
+
+
+
+---31---
+SELECT EXTRACT(MONTH FROM st.date_birth) AS date_birth, AVG(st.score)::numeric(3,2)
+FROM student st
+INNER JOIN student_hobby sth
+ON sth.student_id = st.id
+INNER JOIN hobby h
+ON h.id = sth.hobby_id
+WHERE h.name = 'Футбол'
+GROUP BY date_birth
+
+
+---32---
+SELECT distinct st.name,st.surname,st.n_group
+FROM student st 
+INNER JOIN student_hobby sth
+ON st.id = sth.student_id
+
+
+---33---
+SELECT surname,
+CASE
+	WHEN position('ов' in surname) = 0 THEN 'Не найдено'
+	ELSE position('ов' in surname)::varchar
+	END as position
+FROM student
+
+
+---34---
+CREATE OR REPLACE VIEW sharp_sur AS
+SELECT left(st.surname||'############',12) as surname
+FROM student st 	
+
+
+
+---35---
+SELECT TRIM(TRAILING '#' FROM ss.surname) as surname
+FROM sharp_sur ss
+
+
+
+---36---
+SELECT ('2018-05-01'::date-'2018-04-01'::date)
+
+
+---37---
+CREATE OR REPLACE VIEW next_saturday AS
+SELECT
+	CASE EXTRACT(dow FROM current_date)::int
+		WHEN 0 THEN current_date+1
+		WHEN 1 THEN current_date+2
+		WHEN 2 THEN current_date+3
+		WHEN 3 THEN current_date+4
+		WHEN 4 THEN current_date+5
+		WHEN 5 THEN current_date+6
+		WHEN 6 THEN current_date+7
+	END AS next_sat
+
+
+---38---
+CREATE OR REPLACE VIEW day_week_cent AS
+SELECT EXTRACT(doy FROM current_date) AS day, FLOOR(EXTRACT(doy FROM current_date)/7) AS week, EXTRACT(century FROM current_date) AS century
+
+
+---39---
 
