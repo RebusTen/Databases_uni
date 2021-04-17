@@ -190,3 +190,70 @@ LIMIT 10
 ---20---
 SELECT DISTINCT lh.n_group
 FROM longest_hobby_students lh
+
+
+---21---
+SELECT 	st.id,
+   	st.name,
+   	st.surname
+FROM student st;
+
+
+---22---
+SELECT 	chc.course,
+    	h.name AS hobby_name
+FROM ( 	
+	SELECT 	DISTINCT ON (("left"(st.n_group::character varying::text, 1))) "left"(st.n_group::character varying::text, 1) AS course,
+            	sth.hobby_id,
+            	count(*) AS cnt
+       	FROM student st
+       	JOIN student_hobby sth ON st.id = sth.student_id
+	GROUP BY ("left"(st.n_group::character varying::text, 1)), sth.hobby_id
+	ORDER BY ("left"(st.n_group::character varying::text, 1)), (count(*)) DESC
+     ) chc
+JOIN hobby h ON chc.hobby_id = h.id;
+
+
+---23---
+ SELECT "left"(st.n_group::character varying::text, 1) AS course,
+    h.name
+   FROM student st
+     JOIN student_hobby sth ON st.id = sth.student_id
+     JOIN hobby h ON sth.hobby_id = h.id
+  WHERE "left"(st.n_group::character varying::text, 1) = '2'::text
+  ORDER BY h.risk DESC
+ LIMIT 1;
+
+
+---24---
+ SELECT t1.course,
+    t1.cntg,
+    t2.cntf
+   FROM ( SELECT "left"(st.n_group::character varying::text, 1) AS course,
+            count(*) AS cntg
+           FROM student st
+          GROUP BY ("left"(st.n_group::character varying::text, 1))) t1
+     JOIN ( SELECT "left"(st.n_group::character varying::text, 1) AS course,
+            count(*) AS cntf
+           FROM student st
+          WHERE st.score > 4::numeric
+          GROUP BY ("left"(st.n_group::character varying::text, 1))) t2 ON t1.course = t2.course;'
+
+
+---25---
+ SELECT ht.name
+   FROM ( SELECT h.name,
+            count(*) AS count
+           FROM hobby h
+             JOIN student_hobby sth ON h.id = sth.hobby_id
+          GROUP BY h.name
+          ORDER BY (count(*)) DESC
+         LIMIT 1) ht;
+
+
+---26---
+ SELECT student.name,
+    student.surname,
+    student.date_birth,
+    student.n_group
+   FROM student;
