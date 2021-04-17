@@ -257,3 +257,22 @@ JOIN hobby h ON chc.hobby_id = h.id;
     student.date_birth,
     student.n_group
    FROM student;
+
+
+---27---
+SELECT LEFT(name, 1) AS f_letter, MAX(score)::numeric(3,2) as max_score,AVG(score)::numeric(3,2) as average,MIN(score)::numeric(3,2)
+FROM student
+GROUP BY f_letter
+HAVING MAX(score)>3.6
+
+
+
+---28---
+SELECT st.surname, left(st.n_group::varchar,1) as course,min(score),max(score)
+from student st
+group by st.surname, left(st.n_group::varchar,1) 
+order by st.surname asc
+
+
+---29---
+
