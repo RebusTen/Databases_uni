@@ -1,3 +1,4 @@
+---DONE---
 ---1---
 SELECT st.name, st.surname, hb.name
 FROM student st,
@@ -367,4 +368,26 @@ SELECT EXTRACT(doy FROM current_date) AS day, FLOOR(EXTRACT(doy FROM current_dat
 
 
 ---39---
+SELECT st.name, st.surname, h.name, 
+CASE 
+	WHEN (sth.date_finish IS null)::boolean THEN 'Active'
+	WHEN (sth.date_finish IS NOT null)::boolean THEN 'Inactive'
+END as activity
+FROM student st
+INNER JOIN student_hobby sth
+ON st.id = sth.student_id
+INNER JOIN hobby h 
+ON h.id = sth.hobby_id
+ORDER BY activity
+
+
+---40---
+SELECT tt.score_r, t0.g2281, t2.g3011, t1.g2222, t3.g4011, t4.g4032 
+FROM (SELECT ROUND(score) AS score_r FROM student GROUP BY score_r) as tt
+LEFT JOIN (SELECT ROUND(score) AS score_r, COUNT(*) as g2281 FROM student WHERE n_group = 2281 GROUP BY score_r) as t0 USING(score_r)
+LEFT JOIN (SELECT ROUND(score) AS score_r, COUNT(*) as g2222 FROM student WHERE n_group = 2222 GROUP BY score_r) as t1 USING(score_r)
+LEFT JOIN (SELECT ROUND(score) AS score_r, COUNT(*) as g3011 FROM student WHERE n_group = 3011 GROUP BY score_r) as t2 USING(score_r)
+LEFT JOIN (SELECT ROUND(score) AS score_r, COUNT(*) as g4011 FROM student WHERE n_group = 4011 GROUP BY score_r) as t3 USING(score_r)
+LEFT JOIN (SELECT ROUND(score) AS score_r, COUNT(*) as g4032 FROM student WHERE n_group = 4032 GROUP BY score_r) as t4 USING(score_r)
+ORDER BY score_r
 
